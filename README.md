@@ -42,6 +42,7 @@ Place video files under `public/videos/` before configuring them. Obtain permiss
 ## Interactions and routes
 
 - Responsive navigation, keyboard focus, skip link and reduced-motion support.
+- Brand sparks use inline SVG with inherited theme colours, avoiding iPhone emoji substitution.
 - Workshop filters encoded in the URL; two-question finder; expandable event details and external tickets.
 - Native keyboard-accessible FAQ accordions.
 - Contact form validates locally and produces a copyable draft for Instagram. It never submits or claims a message was sent; no draft is persisted.

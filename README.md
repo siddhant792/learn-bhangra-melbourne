@@ -1,6 +1,6 @@
-# Learn Bhangra Melbourne
+# Learn Bhangra
 
-Original, frontend-only Vue/Vite concept: Punjabi roots, Melbourne moves. No backend, payments, analytics, signup service or invented testimonials.
+Original, frontend-only Vue/Vite concept: Punjabi roots, joyful moves. No backend, payments, analytics, signup service or invented testimonials.
 
 ## Run locally
 
@@ -48,7 +48,7 @@ Place video files under `public/videos/` before configuring them. Obtain permiss
 ## Interactions and routes
 
 - Responsive navigation, keyboard focus, skip link and reduced-motion support.
-- Brand sparks use inline SVG with inherited theme colours, avoiding iPhone emoji substitution. The header pairs its compact two-line wordmark with a horizontal Melbourne location badge.
+- Brand sparks use inline SVG with inherited theme colours, avoiding iPhone emoji substitution. The header uses a compact two-line Learn Bhangra wordmark without a city badge. Visible branding, headlines, page titles and contact drafts use Learn Bhangra; official Instagram, Linktree and booking URLs remain unchanged.
 - Workshop filters encoded in the URL; two-question finder; expandable event details and external tickets.
 - Native keyboard-accessible FAQ accordions.
 - Contact form validates locally and produces a copyable draft for Instagram. It never submits or claims a message was sent; no draft is persisted.
@@ -56,6 +56,6 @@ Place video files under `public/videos/` before configuring them. Obtain permiss
 
 ## Sources and limits
 
-Public Learn Bhangra Melbourne Instagram and Linktree are the contact/source destinations configured in `src/content.js`; workshop artwork and facts come from linked public event listings. The original community reel was supplied locally by the user; additional public workshop reels were downloaded during asset preparation through the requested VideoDropper service. No account credentials were used, and the website itself does not contact a downloader. The broad community/editorial aesthetic was inspired by the supplied reference, but layout, copy and concept illustrations are original. Team biographies and final approved legal policies remain intentionally unfilled. Google Fonts are requested in CSS and have system fallbacks; remove that import or bundle licensed local fonts if external requests are undesirable.
+Public Learn Bhangra Instagram and Linktree are the contact/source destinations configured in `src/content.js`; workshop artwork and facts come from linked public event listings. The original community reel was supplied locally by the user; additional public workshop reels were downloaded during asset preparation through the requested VideoDropper service. No account credentials were used, and the website itself does not contact a downloader. The broad community/editorial aesthetic was inspired by the supplied reference, but layout, copy and concept illustrations are original. Team biographies and final approved legal policies remain intentionally unfilled. Google Fonts are requested in CSS and have system fallbacks; remove that import or bundle licensed local fonts if external requests are undesirable.
 
 This is a design preview, not a production legal document or a real booking/contact system. Browser verification and production build should be performed after dependency/content/asset setup is complete.

@@ -10,7 +10,7 @@ const imageFailed = ref(false)
   <article class="event-card">
     <div class="event-art">
       <img v-if="!imageFailed" :src="event.image" :alt="`${event.title} — official event poster`" loading="lazy" @error="imageFailed = true" />
-      <div v-else class="poster-fallback"><span>LEARN BHANGRA<br />MELBOURNE</span><strong>{{ event.title }}</strong><span>View the official poster on the booking page ↗</span></div>
+      <div v-else class="poster-fallback"><span>LEARN<br />BHANGRA</span><strong>{{ event.title }}</strong><span>View the official poster on the booking page ↗</span></div>
       <span class="event-level">{{ event.level }}</span>
     </div>
     <div class="event-body">

@@ -34,6 +34,6 @@ const router = createRouter({
   },
 })
 router.afterEach((to) => {
-  document.title = `${to.meta.title} | Learn Bhangra Melbourne`
+  document.title = `${to.meta.title} | Learn Bhangra`
 })
 export default router

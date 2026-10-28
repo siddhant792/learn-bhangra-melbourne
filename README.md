@@ -22,12 +22,18 @@ Use the URL printed by Vite. JavaScript, Vue 3 and Vue Router are used throughou
 
 The cobalt-blue homepage uses a full-width background media stage with overlaid text. Add an approved MP4/WebM/MOV/M4V to `public/videos/` (the first filename alphabetically is selected), or set `media.heroVideo` to an explicit local or remote video URL. The background plays muted, loops, and stays inline on phones; a visible pause/play button is provided. It pauses for reduced-motion preferences and while the tab is hidden. Browser autoplay restrictions leave a manual play option. Missing or failed footage shows a blue illustration fallback and an honest pending-footage note, not a pretend video. Set `media.heroPoster` to an approved landscape still for the best loading experience.
 
-The hero is a silent 17-second edit of three client workshop reels, with short crossfades and separate landscape (`/videos/hero-desktop.mp4`) and portrait (`/videos/hero-mobile.mp4`) exports. Phones up to 600px wide use the portrait edit to preserve full-body movement; desktop uses a dancer-focused crop. Matching real stills load before playback. The gallery contains two 24-second workshop excerpts with audio plus the previously supplied community reel. Original user downloads are left untouched. `media.heroVideoMobile` and `media.heroPosterMobile` override desktop media on phones; `media.reels` configures gallery clips.
+The hero is a silent 17-second edit of three client workshop reels, with short crossfades and separate landscape (`/videos/hero-desktop.mp4`) and portrait (`/videos/hero-mobile.mp4`) exports. Phones up to 600px wide use the portrait edit to preserve full-body movement; desktop uses a dancer-focused crop. Matching real stills load before playback. The gallery contains four 24-second workshop excerpts with audio plus the previously supplied community reel. Original user downloads are left untouched. `media.heroVideoMobile` and `media.heroPosterMobile` override desktop media on phones; `media.reels` configures gallery clips.
 
 Workshop footage was downloaded through VideoDropper's public form API from URLs extracted locally from the supplied Instagram page, not from logged-in credentials. Hero sources:
 - https://www.instagram.com/learnbhangra_melbourne/reel/DeogT3WJvmm/
 - https://www.instagram.com/learnbhangra_melbourne/reel/DeodtqOpGIN/
 - https://www.instagram.com/learnbhangra_melbourne/reel/DeoeisHphfX/
+
+Below the hero, two different studio reels replace still-image placeholders: a portrait arched paper frame in the introduction and a separately cropped 4:3 landscape edit in a taped, cobalt-shadow feature frame. They do not reuse the hero's workshop sources. `media.intro` and `media.feature` select these clips. Gallery previews form a mixed-aspect-ratio film-frame masonry layout. Muted inline loops load when scrolled into view, pause offscreen or when the tab is hidden, honour reduced-motion preferences, and provide per-clip play/pause controls. Opening a full gallery video pauses its background previews; full videos retain audio controls. Posters remain loading/error fallbacks, while event posters remain static artwork.
+
+Additional studio sources:
+- https://www.instagram.com/learnbhangra_melbourne/reel/DeCgwl3pX3N/
+- https://www.instagram.com/learnbhangra_melbourne/reel/DeUWBF2Jt7r/
 
 The gallery accepts additional approved uploads via `media.reels`:
 
@@ -42,7 +48,7 @@ Place video files under `public/videos/` before configuring them. Obtain permiss
 ## Interactions and routes
 
 - Responsive navigation, keyboard focus, skip link and reduced-motion support.
-- Brand sparks use inline SVG with inherited theme colours, avoiding iPhone emoji substitution.
+- Brand sparks use inline SVG with inherited theme colours, avoiding iPhone emoji substitution. The header pairs its compact two-line wordmark with a horizontal Melbourne location badge.
 - Workshop filters encoded in the URL; two-question finder; expandable event details and external tickets.
 - Native keyboard-accessible FAQ accordions.
 - Contact form validates locally and produces a copyable draft for Instagram. It never submits or claims a message was sent; no draft is persisted.

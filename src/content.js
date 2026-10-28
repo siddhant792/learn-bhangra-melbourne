@@ -8,7 +8,11 @@ export const media = {
   heroVideoMobile: '/videos/hero-mobile.mp4',
   heroPoster: '/media/hero-dance.jpg',
   heroPosterMobile: '/media/raw-bhangra.jpg',
+  intro: { src: '/videos/class-energy.mp4', poster: '/media/class-energy.jpg', title: 'Shoulder workshop · find your groove' },
+  feature: { src: '/videos/dance-session-wide.mp4', poster: '/media/dance-session-wide.jpg', title: 'A night on the dance floor' },
   reels: [
+    { src: '/videos/class-energy.mp4', poster: '/media/class-energy.jpg', title: 'Shoulder workshop · find your groove', sourceUrl: 'https://www.instagram.com/learnbhangra_melbourne/reel/DeCgwl3pX3N/' },
+    { src: '/videos/dance-session.mp4', poster: '/media/dance-session.jpg', title: 'Studio nights · all heart', sourceUrl: 'https://www.instagram.com/learnbhangra_melbourne/reel/DeUWBF2Jt7r/' },
     { src: '/videos/raw-bhangra.mp4', poster: '/media/raw-bhangra.jpg', title: 'Raw Bhangra · feel the rhythm', sourceUrl: 'https://www.instagram.com/learnbhangra_melbourne/reel/DeogT3WJvmm/' },
     { src: '/videos/folk-workshop.mp4', poster: '/media/folk-workshop.jpg', title: 'Folk workshop · move together', sourceUrl: 'https://www.instagram.com/learnbhangra_melbourne/reel/DeodtqOpGIN/' },
     { src: '/videos/community-dance.mp4', poster: '/media/community-dance.jpg', title: 'Community dance floor', sourceUrl: 'https://www.instagram.com/learnbhangra_melbourne/reel/DdqZiqgJ1qR/' },

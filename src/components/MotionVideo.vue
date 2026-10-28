@@ -1,5 +1,6 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useInlinePlayback } from '../composables/useInlinePlayback.js'
 
 const props = defineProps({
   src: { type: String, required: true },
@@ -11,48 +12,25 @@ const frame = ref(null)
 const video = ref(null)
 const activated = ref(false)
 const visible = ref(false)
-const hidden = ref(document.hidden)
-const reducedMotion = ref(false)
-const userPlayback = ref(null)
-const playing = ref(false)
 const failed = ref(false)
-const wantsPlayback = computed(() => visible.value && !hidden.value && !props.suspended && (userPlayback.value ?? !reducedMotion.value))
+const { playing, wantsPlayback, syncPlayback, togglePlayback } = useInlinePlayback(video, visible, computed(() => props.suspended))
 let observer
-let motionPreference
 
-async function syncPlayback() {
-  if (!video.value) return
-  if (!wantsPlayback.value) { video.value.pause(); return }
-  try { await video.value.play() } catch { playing.value = false }
-  if (!wantsPlayback.value) video.value?.pause()
-}
-function togglePlayback() { userPlayback.value = !playing.value; syncPlayback() }
-function updateVisibility() { hidden.value = document.hidden }
-function updateMotion() { reducedMotion.value = motionPreference.matches; userPlayback.value = null }
-watch(wantsPlayback, syncPlayback)
 onMounted(() => {
-  motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
-  updateMotion()
-  motionPreference.addEventListener('change', updateMotion)
-  document.addEventListener('visibilitychange', updateVisibility)
   observer = new IntersectionObserver(([entry]) => {
     visible.value = entry.isIntersecting
     if (entry.isIntersecting) activated.value = true
+    syncPlayback()
   }, { threshold: 0.1 })
   observer.observe(frame.value)
 })
-onBeforeUnmount(() => {
-  observer?.disconnect()
-  motionPreference?.removeEventListener('change', updateMotion)
-  document.removeEventListener('visibilitychange', updateVisibility)
-  video.value?.pause()
-})
+onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <template>
   <div ref="frame" class="motion-video">
     <img :src="poster" :alt="label" loading="lazy" />
-    <video v-if="activated && !failed" ref="video" :src="src" :poster="poster" :aria-label="label" muted loop playsinline preload="metadata" @canplay="syncPlayback" @playing="playing = true" @pause="playing = false" @error="failed = true"></video>
+    <video v-if="activated && !failed" ref="video" :src="src" :poster="poster" :aria-label="label" muted loop playsinline :autoplay="wantsPlayback" preload="metadata" @loadedmetadata="syncPlayback" @canplay="syncPlayback" @playing="playing = true" @pause="playing = false" @error="failed = true"></video>
     <button v-if="!failed" class="motion-control" type="button" :aria-label="`${playing ? 'Pause' : 'Play'} preview: ${label}`" @click="togglePlayback"><span aria-hidden="true">{{ playing ? 'Ⅱ' : '▶' }}</span> {{ playing ? 'Pause' : 'Play' }}</button>
     <span v-else class="motion-control motion-unavailable">Still from the dance floor</span>
   </div>

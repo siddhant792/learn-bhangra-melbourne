@@ -4,7 +4,11 @@ import { createPayments } from './payments.js'
 export function createBookingHandler({ stripe, store, workshops, origin, mode, functionName, webhookSecret, cronSecret,
   cryptoProvider, schedule = promise => promise, emailKey, fromEmail }) {
   if (!['test', 'live'].includes(mode)) throw new Error('Invalid payment mode.')
-  if (origin && (new URL(origin).origin !== origin || !origin.startsWith('https://'))) throw new Error('APP_ORIGIN must be an HTTPS website origin.')
+  if (origin) {
+    const configured = new URL(origin)
+    if (configured.protocol !== 'https:') throw new Error('APP_ORIGIN must be an HTTPS website origin.')
+    origin = configured.origin
+  }
   const ids = workshops.flatMap(workshop => workshop.tickets.map(ticket => ticket.id))
   if (new Set(ids).size !== ids.length) throw new Error('Ticket IDs must be unique.')
   const ready = Boolean(origin && stripe && store && webhookSecret)

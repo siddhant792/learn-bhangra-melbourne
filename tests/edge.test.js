@@ -4,6 +4,26 @@ import Stripe from 'stripe'
 import { createBookingHandler } from '../supabase/functions/_shared/booking-api.js'
 import { bookingUrl } from '../src/composables/bookingApi.js'
 import { isSellable, validateBooking } from '../supabase/functions/_shared/ticketing.js'
+import { createServer } from 'vite'
+import { createSSRApp, h } from 'vue'
+import { renderToString } from 'vue/server-renderer'
+
+test('Workshop card keeps its ticket link when availability fails', async () => {
+  const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] } })
+  try {
+    const tickets = await vite.ssrLoadModule('/src/composables/useTickets.js')
+    await tickets.refreshTickets()
+    const { default: EventCard } = await vite.ssrLoadModule('/src/components/EventCard.vue')
+    const app = createSSRApp(EventCard, { event: { id: 'dance', title: 'Dance', details: [] } })
+    app.component('RouterLink', { props: ['to'], setup(props, { slots }) {
+      return () => h('a', { href: typeof props.to === 'string' ? props.to : props.to.path }, slots.default?.())
+    } })
+    const html = await renderToString(app)
+    assert.match(html, /href="\/workshops\/dance\/tickets"/)
+    assert.match(html, /Get tickets/)
+    assert.doesNotMatch(html, /href="\/past-workshops"/)
+  } finally { await vite.close() }
+})
 
 test('Frontend calls Supabase directly and unconfirmed or invalid tickets cannot be purchased', () => {
   assert.equal(bookingUrl('/checkout', { VITE_SUPABASE_URL: 'https://project.supabase.co', VITE_BOOKING_FUNCTION: 'bookings-test' }),
@@ -17,6 +37,18 @@ test('Frontend calls Supabase directly and unconfirmed or invalid tickets cannot
   assert.equal(isSellable({ ...ticket, capacity: null }), false)
   assert.equal(isSellable({ ...ticket, amount: null }), false)
   assert.equal(isSellable({ ...ticket, startsAt: new Date(Date.now() + 30 * 60000).toISOString() }), false)
+})
+
+test('Edge configuration accepts a trailing slash and returns matching CORS headers', async () => {
+  const origin = 'https://learn-bhangra-melbourne.vercel.app'
+  const handler = createBookingHandler({ stripe: new Stripe('sk_test_fixture'), store: { takeMaintenanceLease: async () => false },
+    workshops: [], origin: origin + '/', mode: 'test', functionName: 'bookings-test', webhookSecret: 'whsec_fixture' })
+  const url = 'https://project.supabase.co/functions/v1/bookings-test/workshops'
+  const response = await handler(new Request(url, { headers: { Origin: origin } }))
+  assert.equal(response.status, 200)
+  assert.equal(response.headers.get('access-control-allow-origin'), origin)
+  assert.equal((await response.json()).checkoutReady, true)
+  assert.equal((await handler(new Request(url, { method: 'OPTIONS', headers: { Origin: origin } }))).status, 204)
 })
 
 test('Edge handler verifies untouched Stripe payloads, mode and browser origins', async () => {

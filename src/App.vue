@@ -10,7 +10,7 @@ const route = useRoute()
 const menuOpen = ref(false)
 const menuButton = ref(null)
 const main = ref(null)
-const nav = [{ label: 'Home', to: '/' }, { label: 'Our story', to: '/aboutus' }, { label: 'Workshops', to: '/workshops' }, { label: 'Past Workshops', to: '/past-workshops' }, { label: 'FAQs', to: '/frequentlyaskedquestions' }, { label: 'Contact', to: '/getintouch' }]
+const nav = [{ label: 'Home', to: '/' }, { label: 'Our story', to: '/aboutus' }, { label: 'Workshops', to: '/workshops' }, { label: 'FAQs', to: '/frequentlyaskedquestions' }, { label: 'Contact', to: '/getintouch' }]
 function closeMenu(restoreFocus = false) { menuOpen.value = false; if (restoreFocus) nextTick(() => menuButton.value?.focus()) }
 function escape(event) { if (event.key === 'Escape' && menuOpen.value) closeMenu(true) }
 watch(() => route.fullPath, async () => { closeMenu(); await nextTick(); main.value?.focus({ preventScroll: true }) })

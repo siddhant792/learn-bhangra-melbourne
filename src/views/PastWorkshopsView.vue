@@ -6,6 +6,7 @@ import { media } from '../content.js'
 import BrandSpark from '../components/BrandSpark.vue'
 import FollowBanner from '../components/FollowBanner.vue'
 
+defineProps({ embedded: { type: Boolean, default: false } })
 const route = useRoute()
 const router = useRouter()
 const searchMode = computed(() => route.query.browse === 'date' ? 'date' : 'choreography')
@@ -55,7 +56,7 @@ onBeforeUnmount(() => video.value?.pause())
 </script>
 
 <template>
-  <section class="page-hero pink"><p class="eyebrow">GOOD TIMES, ON REPEAT</p><h1>Past workshops.<br /><em>Still feeling it.</em></h1><p>Choreography, familiar faces, and moments from the dance floor.</p><span class="page-hero-doodle" aria-hidden="true"><BrandSpark /></span></section>
+  <section v-if="!embedded" class="page-hero pink"><p class="eyebrow">GOOD TIMES, ON REPEAT</p><h1>Past workshops.<br /><em>Still feeling it.</em></h1><p>Choreography, familiar faces, and moments from the dance floor.</p><span class="page-hero-doodle" aria-hidden="true"><BrandSpark /></span></section>
   <section class="section-pad past-workshops">
     <div class="past-search-toolbar">
       <div class="past-search-modes" role="group" aria-label="Search past workshops by">
@@ -81,7 +82,7 @@ onBeforeUnmount(() => video.value?.pause())
     <div v-if="media.reels.length && !filteredWorkshops.length" class="empty-state past-search-empty"><h2>No workshops found.</h2><p>{{ searchMode === 'date' ? 'No workshops are listed for this date.' : 'No choreography matches this search.' }}</p><button type="button" class="text-link" @click="clearSearch">Show all workshops</button></div>
     <div v-if="!media.reels.length" class="empty-state"><h2>More moments soon.</h2><p>Workshop photos and videos will appear here once shared by Learn Bhangra.</p></div>
   </section>
-  <FollowBanner />
+  <FollowBanner v-if="!embedded" />
   <dialog ref="dialog" class="video-dialog workshop-media-dialog" aria-labelledby="workshop-media-title" @cancel="cancel" @keydown.esc.stop.prevent="close" @click="backdrop">
     <div v-if="selected" class="dialog-content"><div class="dialog-heading"><h2 id="workshop-media-title">{{ selected.title }}</h2><button class="media-close" aria-label="Close workshop media" title="Close" autofocus @click="close"><X :size="22" /></button></div><video v-if="mode === 'video'" ref="video" :src="selected.src" :poster="selected.poster" controls playsinline preload="metadata"></video><div v-else class="workshop-photos"><figure v-for="photo in photos(selected)" :key="photo.src"><img :src="photo.src" :alt="photo.alt || photo.caption || selected.title" /><figcaption v-if="photo.caption">{{ photo.caption }}</figcaption></figure></div></div>
   </dialog>

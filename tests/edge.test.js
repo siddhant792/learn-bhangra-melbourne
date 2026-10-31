@@ -7,6 +7,39 @@ import { isSellable, validateBooking, testWorkshopCatalogue } from '../supabase/
 import { createServer } from 'vite'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
+import { createRouter, createMemoryHistory } from 'vue-router'
+
+test('Workshops embeds past media under one navigation item without duplicate page sections', async () => {
+  const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] } })
+  try {
+    const { default: Workshops } = await vite.ssrLoadModule('/src/views/WorkshopsView.vue')
+    const { default: App } = await vite.ssrLoadModule('/src/App.vue')
+    const router = createRouter({ history: createMemoryHistory(), routes: [
+      { path: '/workshops', component: Workshops },
+      { path: '/:pathMatch(.*)*', component: { render: () => null } },
+    ] })
+    await router.push('/workshops?view=past')
+    const app = createSSRApp(App)
+    app.use(router)
+    const html = await renderToString(app)
+    const nav = html.match(/<nav class="desktop-nav"[^>]*>(.*?)<\/nav>/s)?.[1]
+    assert.ok(nav)
+    assert.doesNotMatch(nav, /Past Workshops/)
+    assert.match(html, /aria-label="Workshop views"/)
+    const tabs = html.match(/<nav[^>]*aria-label="Workshop views"[^>]*>(.*?)<\/nav>/s)?.[1]
+    assert.equal((tabs.match(/aria-current="page"/g) || []).length, 1)
+    assert.match(tabs, /<a[^>]*aria-current="page"[^>]*>Past<\/a>/)
+    assert.match(html, /past-workshop-grid/)
+    assert.match(html, /Video/)
+    assert.match(html, /Photos/)
+    assert.equal((html.match(/<h1[\s>]/g) || []).length, 1)
+    assert.equal((html.match(/class="follow-banner/g) || []).length, 1)
+    await router.push('/workshops')
+    const upcoming = await renderToString(createSSRApp(App).use(router))
+    assert.match(upcoming, /Filter workshops by experience/)
+    assert.doesNotMatch(upcoming, /past-workshop-grid/)
+  } finally { await vite.close() }
+})
 
 test('Workshop card keeps its ticket link when availability fails', async () => {
   const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] } })

@@ -26,7 +26,7 @@ const imageFailed = ref(false)
       <button class="details-toggle" :aria-expanded="expanded" :aria-controls="`details-${event.id}`" @click="expanded = !expanded">{{ expanded ? 'Less detail' : 'The full rundown' }} <span aria-hidden="true">{{ expanded ? '−' : '+' }}</span></button>
       <div v-if="expanded" :id="`details-${event.id}`" class="event-details"><ul><li v-for="detail in event.details" :key="detail">{{ detail }}</li></ul><ul v-if="event.sessions?.length"><li v-for="session in event.sessions" :key="session.date + session.title">{{ session.date }} — {{ session.title }}</li></ul><p>Dates, availability and prices may change. Confirm the latest details with the organiser before booking.</p></div>
       <RouterLink v-if="next || loading || availabilityError" :to="{ path: `/workshops/${event.id}/tickets`, query: next ? { ticket: next.id } : {} }" class="button button-dark event-book">Get tickets <ArrowIcon /></RouterLink>
-      <RouterLink v-else to="/past-workshops" class="button button-dark event-book">Past workshops <ArrowIcon /></RouterLink>
+      <RouterLink v-else :to="{ path: '/workshops', query: { view: 'past' } }" class="button button-dark event-book">Past workshops <ArrowIcon /></RouterLink>
     </div>
   </article>
 </template>

@@ -74,6 +74,25 @@ test('Merchandise lists two design previews without purchase controls', async ()
   } finally { await vite.close() }
 })
 
+test('Site shell has no Stripe test banner even when test mode is active', async () => {
+  const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] } })
+  try {
+    const { default: App } = await vite.ssrLoadModule('/src/App.vue')
+    const tickets = await vite.ssrLoadModule('/src/composables/useTickets.js')
+    const router = createRouter({ history: createMemoryHistory(), routes: [
+      { path: '/:pathMatch(.*)*', component: { render: () => h('p', 'Catalogue page') } },
+    ] })
+    await router.push('/merchandise')
+    const app = createSSRApp({ setup() {
+      tickets.useTickets().testMode.value = true
+      return () => h(App)
+    } }).use(router)
+    const html = await renderToString(app)
+    assert.match(html, /Catalogue page/)
+    assert.doesNotMatch(html, /demo-banner|Stripe test mode|No real charges/)
+  } finally { await vite.close() }
+})
+
 test('Frontend calls Supabase directly and unconfirmed or invalid tickets cannot be purchased', () => {
   assert.equal(bookingUrl('/checkout', { VITE_SUPABASE_URL: 'https://project.supabase.co', VITE_BOOKING_FUNCTION: 'bookings-test' }),
     'https://project.supabase.co/functions/v1/bookings-test/checkout')

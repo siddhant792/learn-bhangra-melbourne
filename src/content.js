@@ -19,6 +19,11 @@ export const media = {
   ],
 }
 
+export const merchandise = [
+  { id: 't-shirt', name: 'Learn Bhangra T-shirt', image: '/media/merchandise/t-shirt.png', alt: 'Design preview of a white T-shirt with blue Learn Bhangra lettering', description: 'For the dance floor and the days in between.' },
+  { id: 'tote-bag', name: 'Learn Bhangra tote bag', image: '/media/merchandise/tote-bag.png', alt: 'Design preview of a blue tote bag with white Learn Bhangra lettering', description: 'A little of the collective to carry with you.' },
+]
+
 export const events = [
   {
     id: 'desi-cardio',

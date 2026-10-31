@@ -73,6 +73,10 @@ npm run build
 
 Tests execute the booking migration in PGlite PostgreSQL and cover inventory, mode isolation, retry idempotency, paid-ticket issuance, expiry, private permissions, rate limits, raw signatures, CORS and maintenance authorization. Deno checks the actual deployable function entry points. PGlite tests do not prove multi-connection locking on the hosted database. A full hosted Stripe test purchase still requires deployed migrations/functions, Stripe sandbox credentials, a configured Preview origin and saleable ticket configuration.
 
+## Merchandise
+
+`/merchandise` lists T-shirts and tote bags without a cart, pricing, size selection or purchase controls. Edit the `merchandise` array in [src/content.js](src/content.js) to update the items. The original bitmap mockups in [public/media/merchandise/t-shirt.png](public/media/merchandise/t-shirt.png) and [public/media/merchandise/tote-bag.png](public/media/merchandise/tote-bag.png) are labelled design previews, not photographs of manufactured products. Replace them with approved product photos when available. This page does not use the booking backend or create merchandise orders.
+
 ## Content and media
 
 [src/content.js](src/content.js) holds public workshop descriptions, original source links, FAQs and media configuration. The booking server supplies saleable sessions and availability. Event posters remain attributed to their public listings and are never presented as videos. The homepage's primary action opens the Workshops page so visitors can choose an event; each workshop's Get tickets action opens its ticket picker. The secondary homepage action opens the story page.

@@ -8,6 +8,7 @@ import { createServer } from 'vite'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 import { createRouter, createMemoryHistory } from 'vue-router'
+import { existsSync } from 'node:fs'
 
 test('Workshops embeds past media under one navigation item without duplicate page sections', async () => {
   const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] } })
@@ -55,6 +56,21 @@ test('Workshop card keeps its ticket link when availability fails', async () => 
     assert.match(html, /href="\/workshops\/dance\/tickets"/)
     assert.match(html, /Get tickets/)
     assert.doesNotMatch(html, /href="\/past-workshops"/)
+  } finally { await vite.close() }
+})
+
+test('Merchandise lists two design previews without purchase controls', async () => {
+  const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] } })
+  try {
+    const { default: Merchandise } = await vite.ssrLoadModule('/src/views/MerchandiseView.vue')
+    const { merchandise } = await vite.ssrLoadModule('/src/content.js')
+    for (const product of merchandise) assert.ok(existsSync(new URL('../public' + product.image, import.meta.url)))
+    const html = await renderToString(createSSRApp(Merchandise))
+    assert.match(html, /Learn Bhangra T-shirt/)
+    assert.match(html, /Learn Bhangra tote bag/)
+    assert.equal((html.match(/class="merchandise-product"/g) || []).length, 2)
+    assert.equal((html.match(/Design preview<\/p>/g) || []).length, 2)
+    assert.doesNotMatch(html, /<form|Add to cart|Buy now|checkout|<select|<input/i)
   } finally { await vite.close() }
 })
 

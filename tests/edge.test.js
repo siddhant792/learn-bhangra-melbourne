@@ -99,6 +99,25 @@ test('Workshop card keeps its ticket link when availability fails', async () => 
   } finally { await vite.close() }
 })
 
+test('Our Story pairs a draft founder narrative with an existing reel still', async () => {
+  const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] } })
+  try {
+    const { default: Editorial } = await vite.ssrLoadModule('/src/views/EditorialView.vue')
+    const app = createSSRApp(Editorial, { kind: 'story' })
+    app.component('RouterLink', { props: ['to'], setup(props, { slots }) {
+      return () => h('a', { href: props.to }, slots.default?.())
+    } })
+    const html = await renderToString(app)
+    assert.match(html, /FOUNDER STORY · DRAFT/)
+    assert.match(html, /It started with a beat/)
+    assert.match(html, /For our founder/)
+    assert.match(html, /src="\/media\/raw-bhangra.jpg"/)
+    assert.match(html, /captured from a Learn Bhangra reel/)
+    assert.ok(existsSync(new URL('../public/media/raw-bhangra.jpg', import.meta.url)))
+    assert.doesNotMatch(html, /This concept imagines/)
+  } finally { await vite.close() }
+})
+
 test('Merchandise lists two design previews without purchase controls', async () => {
   const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] } })
   try {

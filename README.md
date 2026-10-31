@@ -34,7 +34,7 @@ In Supabase Dashboard > Edge Functions > Secrets, set `APP_TEST_ORIGIN` to the e
 
 `https://gqogroabhqnxtmvgnqnh.supabase.co/functions/v1/bookings-test/stripe/webhook`
 
-Subscribe to `checkout.session.completed`, `checkout.session.expired`, and `checkout.session.async_payment_succeeded`. No local Stripe CLI forwarding is needed. Supabase supplies `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` automatically. All custom backend setting names are in [supabase/functions/.env.example](supabase/functions/.env.example); do not put those secrets in Vercel or any `VITE_*` variable.
+Subscribe to `checkout.session.completed`, `checkout.session.expired`, `checkout.session.async_payment_succeeded`, and `checkout.session.async_payment_failed`. Hosted Checkout uses payment methods enabled in Stripe rather than overriding them. Signed failure events release unpaid reservations; paid tickets are never released. No local Stripe CLI forwarding is needed. Supabase supplies `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` automatically. All custom backend setting names are in [supabase/functions/.env.example](supabase/functions/.env.example); do not put those secrets in Vercel or any `VITE_*` variable.
 
 On the existing Vercel project's Preview environment, set `VITE_SUPABASE_URL=https://gqogroabhqnxtmvgnqnh.supabase.co` and `VITE_BOOKING_FUNCTION=bookings-test`, then redeploy a Preview. These two values are public and are also listed in [.env.example](.env.example). CORS and checkout enforce the configured website origin. Stripe calls Supabase directly, so Vercel Preview deployment protection does not block the webhook.
 

@@ -87,3 +87,16 @@ test('Edge handler verifies untouched Stripe payloads, mode and browser origins'
   assert.equal((await call('/stripe/webhook', { method: 'POST', body: live,
     headers: { 'stripe-signature': verifier.webhooks.generateTestHeaderString({ payload: live, secret }) } })).status, 400)
 })
+
+test('Checkout diagnostics expose a safe failure type but never credentials', async () => {
+  const requestId = '11111111-1111-4111-8111-111111111111'
+  const stripe = { checkout: { sessions: { create: async () => { throw Object.assign(new Error('sensitive-key-value'), { type: 'StripeAuthenticationError' }) } } } }
+  const store = { reserve: async () => ({ id: requestId, state: 'creating', quantity: 1, unit_amount: 2200 }), release: async () => {} }
+  const handler = createBookingHandler({ stripe, store, workshops: [], origin: 'https://dance.example', mode: 'test', functionName: 'bookings-test', webhookSecret: 'whsec_fixture' })
+  const response = await handler(new Request('https://project.supabase.co/functions/v1/bookings-test/checkout', {
+    method: 'POST', headers: { Origin: 'https://dance.example' }, body: JSON.stringify({ requestId }) }))
+  assert.equal(response.status, 502)
+  const data = await response.json()
+  assert.equal(data.code, 'StripeAuthenticationError')
+  assert.doesNotMatch(JSON.stringify(data), /sensitive-key-value/)
+})

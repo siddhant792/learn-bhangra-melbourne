@@ -57,6 +57,7 @@ test('Stripe retries retain holds and verified payments issue codes once', async
     let failOnce = true
     const stripe = { checkout: { sessions: {
       async create(params, options) {
+        assert.equal(params.payment_method_types, undefined)
         if (!sessions.has(options.idempotencyKey)) sessions.set(options.idempotencyKey, { id: `cs_test_${randomUUID().replaceAll('-', '')}`,
           status: 'open', payment_status: 'unpaid', metadata: params.metadata, currency: 'aud',
           amount_total: params.line_items[0].price_data.unit_amount * params.line_items[0].quantity, url: 'https://checkout.stripe.com/fixture' })
@@ -85,6 +86,12 @@ test('Stripe retries retain holds and verified payments issue codes once', async
     assert.equal((await setup.store.unsent()).length, 1)
     await setup.store.markEmailSent(selection.requestId)
     assert.equal((await setup.store.unsent()).length, 0)
+    const other = setup.payload(1)
+    await payments.checkout(other)
+    const failedSession = [...sessions.values()].find(item => item.metadata.orderId === other.requestId)
+    failedSession.status = 'complete'
+    assert.equal((await payments.refresh(failedSession, { failed: true })).state, 'failed')
+    assert.equal(await setup.store.remaining(setup.ticket), 2)
     await payments.reconcile()
   } finally { await setup.database.close() }
 })

@@ -56,7 +56,9 @@ export function createBookingHandler({ stripe, store, workshops, origin, mode, f
           if (event.livemode !== (mode === 'live')) throw new Error('Payment mode mismatch.')
         } catch { return respond({ error: 'Invalid webhook signature.' }, 400) }
         try {
-          if (['checkout.session.completed', 'checkout.session.async_payment_succeeded', 'checkout.session.expired'].includes(event.type)) await payments.refresh(event.data.object)
+          if (['checkout.session.completed', 'checkout.session.async_payment_succeeded', 'checkout.session.async_payment_failed', 'checkout.session.expired'].includes(event.type)) {
+            await payments.refresh(event.data.object, { failed: event.type === 'checkout.session.async_payment_failed' })
+          }
           background()
           return respond({ received: true })
         } catch { return respond({ error: 'Payment update will be retried.' }, 500) }
@@ -113,7 +115,11 @@ export function createBookingHandler({ stripe, store, workshops, origin, mode, f
     } catch (error) {
       if (error instanceof BookingError) return respond({ error: error.message }, error.status)
       console.error('Booking operation failed:', error.code || error.name)
-      return respond({ error: 'Checkout is temporarily unavailable. Please retry your current booking.' }, 502)
+      const stripeTypes = ['StripeAuthenticationError', 'StripePermissionError', 'StripeInvalidRequestError', 'StripeConnectionError', 'StripeAPIError']
+      const code = stripeTypes.includes(error.type) ? error.type : /^[0-9A-Z]{5}$/.test(error.code || '') ? error.code : 'CHECKOUT_FAILED'
+      const providerCode = stripeTypes.includes(error.type) && /^[a-z_]{1,64}$/.test(error.code || '') ? error.code : undefined
+      const parameter = stripeTypes.includes(error.type) && /^[a-z_]+(?:\[[a-z_0-9]+\])*$/.test(error.param || '') ? error.param : undefined
+      return respond({ error: 'Checkout is temporarily unavailable. Please retry your current booking.', code, providerCode, parameter }, 502)
     }
   }
 }

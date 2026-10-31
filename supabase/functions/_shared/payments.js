@@ -2,7 +2,7 @@ import { BookingError } from './ticketing.js'
 
 export function createPayments({ stripe, store, workshops, origin, now = Date.now }) {
   async function createSession(order) {
-    const session = await stripe.checkout.sessions.create({ mode: 'payment', payment_method_types: ['card'],
+    const session = await stripe.checkout.sessions.create({ mode: 'payment',
       line_items: [{ price_data: { currency: 'aud', unit_amount: order.unit_amount,
         product_data: { name: order.title, description: `${order.label} · ${order.location}` } }, quantity: order.quantity }],
       metadata: { orderId: order.id }, client_reference_id: order.id, expires_at: order.expires_at,
@@ -12,11 +12,12 @@ export function createPayments({ stripe, store, workshops, origin, now = Date.no
     await store.attachSession(order.id, session.id)
     return session
   }
-  async function refresh(session) {
+  async function refresh(session, { failed = false } = {}) {
     const order = await store.get(session.metadata?.orderId)
     if (!order) return null
     if (order.session_id && order.session_id !== session.id) throw new BookingError('Checkout session mismatch.', 409)
     if (session.status === 'complete' && session.payment_status === 'paid') return store.fulfill(session)
+    if (failed && session.payment_status !== 'paid') await store.release(order.id, 'failed')
     if (session.status === 'expired') await store.release(order.id, 'expired')
     return store.get(order.id)
   }

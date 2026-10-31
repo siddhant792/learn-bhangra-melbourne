@@ -8,7 +8,47 @@ import { createServer } from 'vite'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 import { createRouter, createMemoryHistory } from 'vue-router'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
+
+test('Hero workshop label stays consistent before and after availability loads', async () => {
+  const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] }, plugins: [{
+    name: 'hero-test-video-stubs', enforce: 'pre', load(id) {
+      if (['/HeroBackground.vue', '/MotionVideo.vue'].some(component => id.endsWith(component))) return '<template><div /></template>'
+    },
+  }] })
+  try {
+    const { default: Home } = await vite.ssrLoadModule('/src/views/HomeView.vue')
+    const tickets = await vite.ssrLoadModule('/src/composables/useTickets.js')
+    const router = createRouter({ history: createMemoryHistory(), routes: [
+      { path: '/:pathMatch(.*)*', component: { render: () => null } },
+    ] })
+    await router.push('/')
+    const upcoming = [{ id: 'fixture', tickets: [{ label: 'Upcoming fixture', startsAt: new Date(Date.now() + 86400000).toISOString() }] }]
+    const past = [{ id: 'fixture', tickets: [{ label: 'Past fixture', startsAt: new Date(Date.now() - 86400000).toISOString() }] }]
+    for (const workshops of [[], upcoming, past]) {
+      const app = createSSRApp({ setup() {
+        tickets.useTickets().workshops.value = workshops
+        return () => h(Home)
+      } }).use(router)
+      const html = await renderToString(app)
+      const heroButton = html.match(/<a[^>]*class="[^"]*hero-ticket-cta[^"]*"[^>]*>(.*?)<\/a>/s)?.[0]
+      assert.ok(heroButton)
+      assert.match(heroButton, /href="\/workshops"/)
+      assert.match(heroButton, /Find our next workshop/)
+      assert.doesNotMatch(heroButton, /Get tickets/)
+      if (workshops === upcoming) assert.match(html, /Next workshop: Upcoming fixture/)
+      else assert.doesNotMatch(html, /Next workshop:/)
+    }
+  } finally { await vite.close() }
+})
+
+test('Confirmation container overrides full-width section padding', () => {
+  const styles = readFileSync(new URL('../src/spacing.css', import.meta.url), 'utf8')
+  const rule = styles.match(/\.confirmation-page\s*\{[^}]*\}/)?.[0]
+  assert.ok(rule)
+  assert.match(rule, /width:\s*100%/)
+  assert.match(rule, /padding-inline:\s*var\(--page-gutter\)/)
+})
 
 test('Workshops embeds past media under one navigation item without duplicate page sections', async () => {
   const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] } })

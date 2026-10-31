@@ -105,6 +105,7 @@
 .past-search-count { margin: 0; padding-bottom: var(--space-md); }
 .past-workshop-body { padding: var(--space-lg); }
 .past-workshop-actions { padding-top: var(--space-lg); }
+.confirmation-page { width: 100%; padding-inline: var(--page-gutter); }
 .confirmation-actions { margin-block: var(--space-lg); gap: var(--space-lg); }
 .issued-tickets { margin-top: var(--space-xl); gap: var(--space-lg); }
 .hero.hero-immersive { min-height: calc(100svh - var(--header-height) - 40px); padding-block: 80px 96px; }

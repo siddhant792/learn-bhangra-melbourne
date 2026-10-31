@@ -24,15 +24,16 @@ watch([sessions, () => route.params.id], () => {
   if (!sessions.value.some(ticket => ticket.id === selectedId.value)) {
     const previous = pendingSelection.value?.workshopId === route.params.id ? pendingSelection.value : null
     selectedId.value = sessions.value.find(ticket => ticket.id === route.query.ticket)?.id || sessions.value.find(ticket => ticket.id === previous?.ticketId)?.id || sessions.value.find(ticket => ticket.bookable)?.id || sessions.value[0]?.id || ''
-    if (previous?.ticketId === selectedId.value && Number.isSafeInteger(previous.quantity) && previous.quantity > 0) quantity.value = previous.quantity
+    if (previous?.ticketId === selectedId.value && Number.isSafeInteger(previous.quantity) && previous.quantity > 0 && previous.quantity <= 10) quantity.value = previous.quantity
   }
 }, { immediate: true })
 const ticket = computed(() => sessions.value.find(item => item.id === selectedId.value))
 const sessionDate = computed(() => ticket.value ? new Intl.DateTimeFormat('en-AU', { dateStyle: 'full', timeStyle: 'short', timeZone: 'Australia/Melbourne' }).format(new Date(ticket.value.startsAt)) : '')
 const resuming = computed(() => pendingSelection.value?.workshopId === route.params.id && pendingSelection.value.ticketId === selectedId.value && pendingSelection.value.quantity === quantity.value && typeof pendingSelection.value.requestId === 'string')
-const validQuantity = computed(() => Number.isSafeInteger(quantity.value) && quantity.value >= 1 && quantity.value <= (ticket.value?.remaining || 0))
+const maximumQuantity = computed(() => Math.min(10, ticket.value?.remaining || 0))
+const validQuantity = computed(() => Number.isSafeInteger(quantity.value) && quantity.value >= 1 && quantity.value <= maximumQuantity.value)
 const total = computed(() => ticket.value?.amount && (validQuantity.value || resuming.value) ? ticket.value.amount * quantity.value : null)
-const canBuy = computed(() => checkoutReady.value && ((ticket.value?.bookable && validQuantity.value) || (resuming.value && Number.isSafeInteger(quantity.value) && quantity.value > 0)) && !loading.value && !busy.value)
+const canBuy = computed(() => checkoutReady.value && ((ticket.value?.bookable && validQuantity.value) || (resuming.value && Number.isSafeInteger(quantity.value) && quantity.value > 0 && quantity.value <= 10)) && !loading.value && !busy.value)
 const unavailable = computed(() => {
   if (loading.value || availabilityError.value) return ''
   if (!ticket.value) return 'No upcoming session has been announced for this workshop.'
@@ -119,11 +120,11 @@ onMounted(async () => {
           <label for="ticket-quantity">Number of tickets</label>
           <div class="quantity-control">
             <button type="button" aria-label="One fewer ticket" title="One fewer ticket" :disabled="busy || !ticket?.bookable || quantity <= 1" @click="quantity = Math.max(1, quantity - 1)"><Minus :size="18" /></button>
-            <input id="ticket-quantity" v-model.number="quantity" type="number" min="1" :max="ticket?.remaining || 1" step="1" inputmode="numeric" required :disabled="busy || !ticket?.bookable" />
-            <button type="button" aria-label="One more ticket" title="One more ticket" :disabled="busy || !ticket?.bookable || quantity >= ticket?.remaining" @click="quantity++"><Plus :size="18" /></button>
+            <input id="ticket-quantity" v-model.number="quantity" type="number" min="1" :max="maximumQuantity || 1" step="1" inputmode="numeric" required :disabled="busy || !ticket?.bookable" />
+            <button type="button" aria-label="One more ticket" title="One more ticket" :disabled="busy || !ticket?.bookable || quantity >= maximumQuantity" @click="quantity = Math.min(maximumQuantity, quantity + 1)"><Plus :size="18" /></button>
           </div>
           <p class="ticket-unit-price">{{ ticket?.amount ? `${money(ticket.amount)} per ticket · AUD` : 'Price to be announced' }}</p>
-          <p v-if="ticket?.bookable && !validQuantity && !resuming" class="booking-error" role="alert">Choose between 1 and {{ ticket.remaining }} tickets.</p>
+          <p v-if="ticket?.bookable && !validQuantity && !resuming" class="booking-error" role="alert">Choose between 1 and {{ maximumQuantity }} tickets.</p>
           <dl class="ticket-total"><dt>Total</dt><dd>{{ total ? money(total) : '—' }}</dd></dl>
         </template>
         <p v-if="unavailable" class="booking-notice" role="status">{{ unavailable }}</p>

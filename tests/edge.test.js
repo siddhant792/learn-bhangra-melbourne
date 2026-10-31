@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import Stripe from 'stripe'
 import { createBookingHandler } from '../supabase/functions/_shared/booking-api.js'
 import { bookingUrl } from '../src/composables/bookingApi.js'
-import { isSellable, validateBooking } from '../supabase/functions/_shared/ticketing.js'
+import { isSellable, validateBooking, testWorkshopCatalogue } from '../supabase/functions/_shared/ticketing.js'
 import { createServer } from 'vite'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
@@ -37,6 +37,9 @@ test('Frontend calls Supabase directly and unconfirmed or invalid tickets cannot
   assert.equal(isSellable({ ...ticket, capacity: null }), false)
   assert.equal(isSellable({ ...ticket, amount: null }), false)
   assert.equal(isSellable({ ...ticket, startsAt: new Date(Date.now() + 30 * 60000).toISOString() }), false)
+  const largeSession = [{ id: 'dance', tickets: [{ ...ticket, capacity: 50 }] }]
+  assert.equal(validateBooking(largeSession, 'dance', 'session', 10, 50).amount, 22000)
+  assert.throws(() => validateBooking(largeSession, 'dance', 'session', 11, 50), /between 1 and 10/)
 })
 
 test('Edge configuration accepts a trailing slash and returns matching CORS headers', async () => {
@@ -49,6 +52,15 @@ test('Edge configuration accepts a trailing slash and returns matching CORS head
   assert.equal(response.headers.get('access-control-allow-origin'), origin)
   assert.equal((await response.json()).checkoutReady, true)
   assert.equal((await handler(new Request(url, { method: 'OPTIONS', headers: { Origin: origin } }))).status, 204)
+})
+
+test('Sandbox fills unset seats without changing live inventory or unconfirmed prices', () => {
+  const source = [{ id: 'dance', tickets: [{ id: 'session', capacity: null, amount: 2200 }, { id: 'unknown', capacity: null, amount: null }] }]
+  const sandbox = testWorkshopCatalogue(source)
+  assert.equal(sandbox[0].tickets[0].capacity, 10)
+  assert.equal(source[0].tickets[0].capacity, null)
+  assert.equal(sandbox[0].tickets[1].amount, null)
+  assert.equal(isSellable(sandbox[0].tickets[1]), false)
 })
 
 test('Edge handler verifies untouched Stripe payloads, mode and browser origins', async () => {

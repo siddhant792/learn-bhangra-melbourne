@@ -6,6 +6,9 @@ import GalleryView from './views/GalleryView.vue'
 import FaqView from './views/FaqView.vue'
 import ContactView from './views/ContactView.vue'
 import LegalView from './views/LegalView.vue'
+import BookingView from './views/BookingView.vue'
+import BookingConfirmationView from './views/BookingConfirmationView.vue'
+import PastWorkshopsView from './views/PastWorkshopsView.vue'
 
 const routes = [
   { path: '/', alias: '/home', component: HomeView, meta: { title: 'Find your people. Feel the beat.' } },
@@ -14,6 +17,9 @@ const routes = [
   { path: '/what-is-bhangra-energy', component: EditorialView, props: { kind: 'culture' }, meta: { title: 'Bhangra energy & community' } },
   { path: '/hgscevents', component: WorkshopsView, props: { mode: 'events' }, meta: { title: "What's on" } },
   { path: '/workshops', component: WorkshopsView, props: { mode: 'workshops' }, meta: { title: 'Workshops' } },
+  { path: '/workshops/:id/tickets', component: BookingView, meta: { title: 'Get tickets' } },
+  { path: '/booking/confirmation', component: BookingConfirmationView, meta: { title: 'Your tickets' } },
+  { path: '/past-workshops', component: PastWorkshopsView, meta: { title: 'Past workshops' } },
   { path: '/media', component: GalleryView, meta: { title: 'The movement gallery' } },
   { path: '/getintouch', component: ContactView, meta: { title: 'Get in touch' } },
   { path: '/frequentlyaskedquestions', component: FaqView, meta: { title: 'Your questions, answered' } },

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "desi-cardio", "title": "Desi Cardio", "location": "Pulse Studios AU, 285 Carlisle Street, Balaclava",
+    "tickets": [
+      { "id": "desi-oct29", "label": "Gujarat meets Punjab · 29 October", "startsAt": "2026-10-29T18:15:00+11:00", "amount": 2200, "capacity": null, "active": true },
+      { "id": "desi-nov5", "label": "Jodi Jam · 5 November", "startsAt": "2026-11-05T18:15:00+11:00", "amount": 2200, "capacity": null, "active": true },
+      { "id": "desi-nov12", "label": "Sangeet Sweat · 12 November", "startsAt": "2026-11-12T18:15:00+11:00", "amount": 2200, "capacity": null, "active": true }
+    ]
+  },
+  {
+    "id": "intermediate", "title": "Intermediate Bhangra Workshop", "location": "Pulse Studios AU, 285 Carlisle Street, Balaclava",
+    "tickets": [
+      { "id": "intermediate-oct31", "label": "Shades · 31 October", "startsAt": "2026-10-31T17:00:00+11:00", "amount": null, "capacity": null, "active": true }
+    ]
+  }
+]

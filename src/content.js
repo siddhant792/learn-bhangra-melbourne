@@ -30,7 +30,7 @@ export const events = [
     month: 'OCT',
     time: 'Thursdays · 6:15–7:30 pm',
     location: 'Pulse Studios AU · Balaclava',
-    price: '$22 per session · $60 for all three',
+    price: '$22 per session',
     description: 'Garba, Bhangra and Bollywood. Three electric sessions, desi bangers and a dance floor open to every experience level.',
     image: '/media/desi-cardio.jpg',
     booking: 'https://events.humanitix.com/desi-cardio',
@@ -51,11 +51,11 @@ export const events = [
     month: 'OCT',
     time: '5:00–6:30 pm',
     location: 'Pulse Studios AU · Balaclava',
-    price: 'See booking page for ticket price',
+    price: 'Price to be announced',
     description: 'Ready for your next step? Learn a Bhangra routine to “Shades” by G Sidhu in a feel-good Learn Bhangra workshop.',
     image: '/media/intermediate.jpg',
     booking: 'https://events.humanitix.com/intermediate-bhangra-workshop-npujzkyw/tickets?dateId=6ada12fac8b735aaa5a7e335',
-    details: ['Some Bhangra experience required.', 'A 90-minute intermediate workshop.', 'Pulse Studios AU, 285 Carlisle Street, Balaclava.', 'Confirm availability, price and all event details on Humanitix before booking.'],
+    details: ['Some Bhangra experience required.', 'A 90-minute intermediate workshop.', 'Pulse Studios AU, 285 Carlisle Street, Balaclava.'],
   },
 ]
 
@@ -64,7 +64,7 @@ export const faqs = [
   { question: 'Can I come on my own?', answer: 'Absolutely. Come solo or bring a friend. Desi Cardio’s Jodi Jam session invites you to bring a partner or find one on the night.' },
   { question: 'Where are the workshops?', answer: 'The currently listed October and November 2026 sessions are at Pulse Studios AU, 285 Carlisle Street, Balaclava. Venues can change, so always check your booking confirmation.' },
   { question: 'What should I wear and bring?', answer: 'For Desi Cardio, wear comfortable clothes and trainers, and bring water. For other workshops, check the event listing or message the collective if you have questions.' },
-  { question: 'How do I book a spot?', answer: 'Choose a workshop and follow its Book a spot button to the official Humanitix listing. Tickets and payments are handled there, not on this concept website.' },
-  { question: 'What if I need to cancel?', answer: 'Check the cancellation and refund conditions on your Humanitix event listing or contact the organiser through the booking page. This preview does not set a refund policy.' },
+  { question: 'How do I book a spot?', answer: 'Choose Get tickets on a workshop, select a session and the number of tickets, then continue to secure Stripe checkout. You do not need an account. After payment is confirmed, your tickets appear on the confirmation page.' },
+  { question: 'What if I need to cancel?', answer: 'Contact Learn Bhangra to discuss a paid booking. Leaving checkout before paying is not a refund request. The organiser must confirm the cancellation and refund policy before ticket sales open.' },
   { question: 'How can I ask about accessibility or suitability?', answer: 'Message Learn Bhangra on Instagram or contact the organiser through Humanitix before booking. The collective can confirm venue access and whether a particular session suits your needs.' },
 ]

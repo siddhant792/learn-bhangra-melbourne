@@ -82,6 +82,8 @@
 .form-field { margin-bottom: var(--space-lg); }
 .form-field label { margin-bottom: var(--space-xs); }
 .contact-note { margin-top: var(--space-xl); }
+.faq-page, .home-faq, .legal-copy { width: 100%; padding-inline: var(--page-gutter); }
+.legal-copy { margin-inline: auto; }
 .faq-list summary { padding-block: var(--space-lg); }
 .faq-answer { padding-bottom: var(--space-lg); }
 .faq-contact { padding-top: var(--space-2xl); }

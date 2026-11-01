@@ -73,6 +73,18 @@ npm run build
 
 Tests execute the booking migration in PGlite PostgreSQL and cover inventory, mode isolation, retry idempotency, paid-ticket issuance, expiry, private permissions, rate limits, raw signatures, CORS and maintenance authorization. Deno checks the actual deployable function entry points. PGlite tests do not prove multi-connection locking on the hosted database. A full hosted Stripe test purchase still requires deployed migrations/functions, Stripe sandbox credentials, a configured Preview origin and saleable ticket configuration.
 
+### Desktop and mobile audit
+
+```bash
+npx playwright install chromium
+npm run test:ui
+npx playwright show-report
+```
+
+The browser suite checks every route, aliases, redirects, unavailable bookings, paid/pending/expired/error confirmations, FAQ answers, contact validation, media dialogs and print styles at 1920, 1440, 1024 and 390 pixels. It saves a full-page screenshot for every case and checks image loading, JavaScript errors, horizontal overflow, clipped text, header overlap and squeezed content sections. Reports and screenshots are generated in ignored `playwright-report/` and `test-results/` directories.
+
+All booking API responses in this suite are synthetic: no orders, payments or inventory changes are made. Tests explicitly delay availability to ensure a past Intermediate workshop never flashes as upcoming, and verify that future Intermediate sessions remain visible even when their price is unconfirmed. The local frontend starts automatically; set `UI_AUDIT_BASE_URL` to the deployed test-mode site's URL to repeat the same checks against its published assets.
+
 ## Merchandise
 
 `/merchandise` lists T-shirts and tote bags without a cart, pricing, size selection or purchase controls. Edit the `merchandise` array in [src/content.js](src/content.js) to update the items. The original bitmap mockups in [public/media/merchandise/t-shirt.png](public/media/merchandise/t-shirt.png) and [public/media/merchandise/tote-bag.png](public/media/merchandise/tote-bag.png) are labelled design previews, not photographs of manufactured products. Replace them with approved product photos when available. This page does not use the booking backend or create merchandise orders.

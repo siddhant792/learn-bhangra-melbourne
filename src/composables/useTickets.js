@@ -32,11 +32,12 @@ export async function refreshTickets() {
 
 export function useTickets() {
   onMounted(refreshTickets)
-  const nextWorkshop = computed(() => workshops.value
+  const upcomingSessions = computed(() => workshops.value
     .flatMap(workshop => workshop.tickets.filter(ticket => Date.parse(ticket.startsAt) > Date.now())
       .map(ticket => ({ workshopId: workshop.id, ...ticket })))
-    .sort((first, second) => Date.parse(first.startsAt) - Date.parse(second.startsAt))[0])
-  return { workshops, loading, error, checkoutReady, testMode, nextWorkshop, refresh: refreshTickets }
+    .sort((first, second) => Date.parse(first.startsAt) - Date.parse(second.startsAt)))
+  const nextWorkshop = computed(() => upcomingSessions.value[0])
+  return { workshops, loading, error, checkoutReady, testMode, upcomingSessions, nextWorkshop, refresh: refreshTickets }
 }
 
 export function money(amount) {

@@ -138,12 +138,38 @@ for (const width of [1920, 1440, 1024, 390]) {
         const data = availability()
         for (const ticket of data.workshops.find(workshop => workshop.id === 'intermediate').tickets) ticket.startsAt = new Date(Date.now() - 86400000).toISOString()
         await request.fulfill({ headers: { 'access-control-allow-origin': '*' }, json: data })
-        await expect(page.locator('.event-card')).toHaveCount(1)
-        await expect(page.locator('.event-card')).not.toContainText('Intermediate Bhangra Workshop')
+        await expect(page.locator('.event-card')).toHaveCount(path === '/' ? 2 : 3)
+        await expect(page.locator('.event-card').filter({ hasText: 'Intermediate Bhangra Workshop' })).toHaveCount(0)
         await expect(page.getByText('Loading upcoming workshops…')).toHaveCount(0)
         await page.unroute('**/bookings-test/workshops')
       }
       await checkLayout(page, testInfo)
+    })
+
+    test('Both November sessions have distinct cards and ticket links', async ({ page }, testInfo) => {
+      await page.clock.setFixedTime(new Date('2026-11-01T00:00:00Z'))
+      await page.route('**/bookings-test/workshops', route => route.fulfill({ headers: { 'access-control-allow-origin': '*' }, json: {
+        checkoutReady: true, test: true,
+        workshops: catalogue.map(workshop => ({ ...workshop, tickets: workshop.tickets.map(ticket => ({
+          ...ticket, capacity: 10, remaining: ticket.id === 'desi-nov12' ? 7 : 9,
+          bookable: Boolean(ticket.amount) && Date.parse(ticket.startsAt) > Date.parse('2026-11-01T00:00:00Z'),
+        })) })),
+      } }))
+      for (const path of ['/workshops', '/']) {
+        await ready(page, path)
+        await expect(page.locator('.event-card')).toHaveCount(2)
+        await expect(page.locator('.event-card h3')).toHaveText(['Desi Cardio · Jodi Jam · 5 November', 'Desi Cardio · Sangeet Sweat · 12 November'])
+        await expect(page.locator('.event-card').first()).toContainText('9 remaining')
+        await expect(page.locator('.event-card').nth(1)).toContainText('7 remaining')
+        await expect(page.locator('.event-book').first()).toHaveAttribute('href', '/workshops/desi-cardio/tickets?ticket=desi-nov5')
+        await expect(page.locator('.event-book').nth(1)).toHaveAttribute('href', '/workshops/desi-cardio/tickets?ticket=desi-nov12')
+        await page.locator('.details-toggle').nth(1).click()
+        await expect(page.locator('#details-desi-cardio-desi-nov12')).toBeVisible()
+        await expect(page.locator('#details-desi-cardio-desi-nov5')).toHaveCount(0)
+        await checkLayout(page, testInfo)
+      }
+      await page.locator('.event-book').nth(1).click()
+      await expect(page.locator('#ticket-session')).toHaveValue('desi-nov12')
     })
 
     test('Future Intermediate remains visible with unconfirmed pricing', async ({ page }, testInfo) => {
@@ -165,7 +191,7 @@ for (const width of [1920, 1440, 1024, 390]) {
       await expect(page.getByRole('heading', { name: 'Workshop dates are temporarily unavailable.' })).toBeVisible()
       await expect(page.locator('.event-card')).toHaveCount(0)
       await page.getByRole('button', { name: 'Try again' }).click()
-      await expect(page.locator('.event-card')).toHaveCount(2)
+      await expect(page.locator('.event-card')).toHaveCount(4)
       await checkLayout(page, testInfo)
     })
 

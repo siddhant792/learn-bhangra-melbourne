@@ -7,7 +7,7 @@
 .booking-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:70px;align-items:start;max-width:1160px;margin:auto}
 .booking-story h1{font-size:2.8rem;letter-spacing:0;margin:16px 0 22px;overflow-wrap:anywhere}
 .booking-story>p{max-width:600px}
-.booking-story>img{width:min(100%,460px);aspect-ratio:3/4;object-fit:contain;margin:28px 0;background:var(--pink)}
+.booking-story>img{display:block;width:100%;height:auto;object-fit:contain;margin:28px 0;border-radius:6px}
 .booking-story ul{padding-left:20px;font-size:.88rem}
 .booking-venue{font-weight:700}
 .ticket-picker{padding:30px;background:white;border:1px solid #09238c35;border-radius:8px;position:sticky;top:125px;min-width:0}

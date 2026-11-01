@@ -195,6 +195,18 @@ for (const width of [1920, 1440, 1024, 390]) {
       await checkLayout(page, testInfo)
     })
 
+    test('Booking posters retain their native proportions without empty bands', async ({ page }, testInfo) => {
+      for (const path of ['/workshops/desi-cardio/tickets', '/workshops/intermediate/tickets']) {
+        await ready(page, path)
+        const geometry = await page.locator('.booking-story > img').evaluate(image => {
+          const bounds = image.getBoundingClientRect()
+          return { width: bounds.width, height: bounds.height, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight }
+        })
+        expect(Math.abs(geometry.height - geometry.width * geometry.naturalHeight / geometry.naturalWidth)).toBeLessThan(1)
+        await checkLayout(page, testInfo)
+      }
+    })
+
     test('FAQ answers and mobile navigation', async ({ page }, testInfo) => {
       await ready(page, '/frequentlyaskedquestions')
       const summaries = page.locator('.faq-page summary')

@@ -20,8 +20,14 @@ export const media = {
 }
 
 export const merchandise = [
-  { id: 't-shirt', name: 'Learn Bhangra T-shirt', image: '/media/merchandise/t-shirt.png', alt: 'Design preview of a white T-shirt with blue Learn Bhangra lettering', description: 'For the dance floor and the days in between.' },
-  { id: 'tote-bag', name: 'Learn Bhangra tote bag', image: '/media/merchandise/tote-bag.png', alt: 'Design preview of a blue tote bag with white Learn Bhangra lettering', description: 'A little of the collective to carry with you.' },
+  { id: 'tee-original', category: 't-shirts', name: 'Original Wordmark Tee', image: '/media/merchandise/tee-original.webp', alt: 'Design preview of a white T-shirt with the cobalt Learn Bhangra wordmark', description: 'White with the signature cobalt wordmark.' },
+  { id: 'tee-rhythm-club', category: 't-shirts', name: 'Rhythm Club Tee', image: '/media/merchandise/tee-rhythm-club.webp', alt: 'Design preview of a charcoal T-shirt with a lime Learn Bhangra Rhythm Club print', description: 'Charcoal, lime, and every body on the beat.' },
+  { id: 'tee-punjabi-roots', category: 't-shirts', name: 'Punjabi Roots Tee', image: '/media/merchandise/tee-punjabi-roots.webp', alt: 'Design preview of a forest-green T-shirt with cream Punjabi Roots and Learn Bhangra lettering', description: 'Forest green. Punjabi roots. Joyful moves.' },
+  { id: 'tee-good-energy', category: 't-shirts', name: 'Good Energy Tee', image: '/media/merchandise/tee-good-energy.webp', alt: 'Design preview of a cobalt T-shirt with white Good Energy Only and Learn Bhangra lettering', description: 'Electric blue with good energy front and centre.' },
+  { id: 'tote-original', category: 'tote-bags', name: 'Original Wordmark Tote', image: '/media/merchandise/tote-original.webp', alt: 'Design preview of a white tote bag with the cobalt Learn Bhangra wordmark', description: 'The signature wordmark, ready to go with you.' },
+  { id: 'tote-rhythm-club', category: 'tote-bags', name: 'Rhythm Club Tote', image: '/media/merchandise/tote-rhythm-club.webp', alt: 'Design preview of a coral tote bag with a cream Learn Bhangra Rhythm Club print', description: 'Coral with a little rhythm to carry around.' },
+  { id: 'tote-punjabi-roots', category: 'tote-bags', name: 'Punjabi Roots Tote', image: '/media/merchandise/tote-punjabi-roots.webp', alt: 'Design preview of a cobalt tote bag with white Punjabi Roots and Learn Bhangra lettering', description: 'Cobalt blue. Culture close at hand.' },
+  { id: 'tote-good-energy', category: 'tote-bags', name: 'Good Energy Tote', image: '/media/merchandise/tote-good-energy.webp', alt: 'Design preview of a mint tote bag with dark-green Good Energy Only and Learn Bhangra lettering', description: 'Fresh mint with a good-energy statement.' },
 ]
 
 export const events = [

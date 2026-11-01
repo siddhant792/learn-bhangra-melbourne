@@ -87,7 +87,7 @@ All booking API responses in this suite are synthetic: no orders, payments or in
 
 ## Merchandise
 
-`/merchandise` lists T-shirts and tote bags without a cart, pricing, size selection or purchase controls. Edit the `merchandise` array in [src/content.js](src/content.js) to update the items. The original bitmap mockups in [public/media/merchandise/t-shirt.png](public/media/merchandise/t-shirt.png) and [public/media/merchandise/tote-bag.png](public/media/merchandise/tote-bag.png) are labelled design previews, not photographs of manufactured products. Replace them with approved product photos when available. This page does not use the booking backend or create merchandise orders.
+`/merchandise` lists four T-shirts and four tote bags in separate sections, without a cart, pricing, size selection or purchase controls. Edit the `merchandise` array in [src/content.js](src/content.js) to update the items. Eight original 1000-pixel WebP mockups are saved alongside [public/media/merchandise/tee-original.webp](public/media/merchandise/tee-original.webp) and [public/media/merchandise/tote-original.webp](public/media/merchandise/tote-original.webp), covering Original Wordmark, Rhythm Club, Punjabi Roots and Good Energy designs. They are labelled design previews, not photographs of manufactured products. Replace them with approved product photos when available. No merchandise checkout or orders are created.
 
 ## Content and media
 

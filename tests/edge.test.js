@@ -118,17 +118,20 @@ test('Our Story pairs a draft founder narrative with an existing reel still', as
   } finally { await vite.close() }
 })
 
-test('Merchandise lists two design previews without purchase controls', async () => {
+test('Merchandise lists four T-shirts and four totes without purchase controls', async () => {
   const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] } })
   try {
     const { default: Merchandise } = await vite.ssrLoadModule('/src/views/MerchandiseView.vue')
     const { merchandise } = await vite.ssrLoadModule('/src/content.js')
     for (const product of merchandise) assert.ok(existsSync(new URL('../public' + product.image, import.meta.url)))
     const html = await renderToString(createSSRApp(Merchandise))
-    assert.match(html, /Learn Bhangra T-shirt/)
-    assert.match(html, /Learn Bhangra tote bag/)
-    assert.equal((html.match(/class="merchandise-product"/g) || []).length, 2)
-    assert.equal((html.match(/Design preview<\/p>/g) || []).length, 2)
+    assert.equal(merchandise.filter(product => product.category === 't-shirts').length, 4)
+    assert.equal(merchandise.filter(product => product.category === 'tote-bags').length, 4)
+    assert.equal(new Set(merchandise.map(product => product.image)).size, 8)
+    assert.match(html, /T-shirts/)
+    assert.match(html, /Tote bags/)
+    assert.equal((html.match(/class="merchandise-product"/g) || []).length, 8)
+    assert.equal((html.match(/Design preview<\/p>/g) || []).length, 8)
     assert.doesNotMatch(html, /<form|Add to cart|Buy now|checkout|<select|<input/i)
   } finally { await vite.close() }
 })

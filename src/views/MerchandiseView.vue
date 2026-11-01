@@ -47,10 +47,10 @@ const groups = [
 .merchandise-details h3 { font-size: 1.2rem; line-height: 1.3; margin: 0 0 var(--space-sm); }
 .merchandise-details > p { margin: 0; font-size: .9rem; }
 .merchandise-details .merchandise-price { margin-top: auto; padding-top: var(--space-md); font-size: 1.1rem; font-weight: 600; }
-.merchandise-cart { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 44px; margin-top: var(--space-sm); padding: 10px 12px; border: 0; border-radius: 6px; background: #191919; color: #fff; font: inherit; font-size: .9rem; cursor: pointer; }
-.merchandise-cart:hover { background: #333; }
-.merchandise-cart:active { background: #080808; }
-.merchandise-cart:focus-visible { outline: 2px solid #1537e8; outline-offset: 3px; }
+.merchandise-cart { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 44px; margin-top: var(--space-sm); padding: 10px 12px; border: 0; border-radius: 6px; background: var(--burgundy); color: var(--butter); font: inherit; font-size: .9rem; cursor: pointer; }
+.merchandise-cart:hover { background: var(--orange); }
+.merchandise-cart:active { background: var(--burgundy); }
+.merchandise-cart:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
 @media (max-width: 1000px) {
   .merchandise-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

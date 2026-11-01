@@ -158,7 +158,7 @@ for (const width of [1920, 1440, 1024, 390]) {
       for (const path of ['/workshops', '/']) {
         await ready(page, path)
         await expect(page.locator('.event-card')).toHaveCount(2)
-        await expect(page.locator('.event-card h3')).toHaveText(['Desi Cardio · Jodi Jam · 5 November', 'Desi Cardio · Sangeet Sweat · 12 November'])
+        await expect(page.locator('.event-card h3')).toHaveText(['Desi Cardio · Jodi Jam · 5 November', 'Desi Cardio · Sangeet · 12 November'])
         await expect(page.locator('.event-card').first()).toContainText('9 remaining')
         await expect(page.locator('.event-card').nth(1)).toContainText('7 remaining')
         await expect(page.locator('.event-book').first()).toHaveAttribute('href', '/workshops/desi-cardio/tickets?ticket=desi-nov5')

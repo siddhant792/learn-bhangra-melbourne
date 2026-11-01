@@ -20,7 +20,7 @@ const groups = [
       <h2>{{ group.name }}</h2>
       <div class="merchandise-grid">
         <article v-for="product in group.products" :key="product.id" class="merchandise-product" :aria-labelledby="`merchandise-${product.id}`">
-          <img :src="product.image" :alt="product.alt" width="1000" height="1000" loading="lazy" decoding="async" />
+          <img :src="product.image" :alt="product.alt" :width="product.width" :height="product.height" loading="lazy" decoding="async" />
           <div class="merchandise-details">
             <p class="eyebrow">Design preview</p>
             <h3 :id="`merchandise-${product.id}`">{{ product.name }}</h3>
@@ -38,7 +38,7 @@ const groups = [
 .merchandise-group > h2 { font-size: 1.75rem; margin: 0 0 var(--space-lg); }
 .merchandise-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-lg); }
 .merchandise-product { min-width: 0; }
-.merchandise-product > img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; border-radius: 6px; }
+.merchandise-product > img { display: block; width: 100%; height: auto; object-fit: contain; border-radius: 6px; }
 .merchandise-details { padding-top: var(--space-md); }
 .merchandise-details .eyebrow { margin-bottom: var(--space-sm); }
 .merchandise-details h3 { font-size: 1.2rem; line-height: 1.3; margin: 0 0 var(--space-sm); }

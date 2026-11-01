@@ -87,7 +87,7 @@ All booking API responses in this suite are synthetic: no orders, payments or in
 
 ## Merchandise
 
-`/merchandise` lists four T-shirts and four tote bags in separate sections, without a cart, pricing, size selection or purchase controls. Edit the `merchandise` array in [src/content.js](src/content.js) to update the items. Eight original 1000-pixel WebP mockups are saved alongside [public/media/merchandise/tee-original.webp](public/media/merchandise/tee-original.webp) and [public/media/merchandise/tote-original.webp](public/media/merchandise/tote-original.webp), covering Original Wordmark, Rhythm Club, Punjabi Roots and Good Energy designs. They are labelled design previews, not photographs of manufactured products. Replace them with approved product photos when available. No merchandise checkout or orders are created.
+`/merchandise` lists four T-shirts and four tote bags in separate sections, without a cart, pricing, size selection or purchase controls. Edit the `merchandise` array in [src/content.js](src/content.js) to update the items. The supplied Gemini T-shirt images and tote screenshots were renamed descriptively, including [public/media/merchandise/tee-festival-lettering.jpeg](public/media/merchandise/tee-festival-lettering.jpeg) and [public/media/merchandise/tote-brush-lettering.png](public/media/merchandise/tote-brush-lettering.png). Their original image bytes and proportions are preserved; the assistant-generated mockups were removed. They remain labelled design previews, not confirmed manufactured products. No merchandise checkout or orders are created.
 
 ## Content and media
 

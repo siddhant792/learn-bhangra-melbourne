@@ -118,7 +118,7 @@ test('Our Story pairs a draft founder narrative with an existing reel still', as
   } finally { await vite.close() }
 })
 
-test('Merchandise lists four T-shirts and four totes without purchase controls', async () => {
+test('Merchandise lists four T-shirts and four totes with prices and placeholder cart buttons', async () => {
   const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, entries: [] } })
   try {
     const { default: Merchandise } = await vite.ssrLoadModule('/src/views/MerchandiseView.vue')
@@ -132,7 +132,12 @@ test('Merchandise lists four T-shirts and four totes without purchase controls',
     assert.match(html, /Tote bags/)
     assert.equal((html.match(/class="merchandise-product"/g) || []).length, 8)
     assert.equal((html.match(/Design preview<\/p>/g) || []).length, 8)
-    assert.doesNotMatch(html, /<form|Add to cart|Buy now|checkout|<select|<input/i)
+    assert.ok(merchandise.every(product => product.price === (product.category === 't-shirts' ? 34.99 : 11.99)))
+    assert.equal((html.match(/\$34\.99 AUD/g) || []).length, 4)
+    assert.equal((html.match(/\$11\.99 AUD/g) || []).length, 4)
+    assert.equal((html.match(/>Add to cart<\/button>/g) || []).length, 8)
+    assert.equal((html.match(/type="button" class="merchandise-cart"/g) || []).length, 8)
+    assert.doesNotMatch(html, /<form|Buy now|checkout|<select|<input/i)
   } finally { await vite.close() }
 })
 

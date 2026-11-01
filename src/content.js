@@ -28,7 +28,7 @@ export const merchandise = [
   { id: 'tote-golden-dancer', category: 'tote-bags', name: 'Golden Dancer Tote', image: '/media/merchandise/tote-golden-dancer.png', width: 540, height: 732, alt: 'Black tote bag with a gold Bhangra dancer and brush-stroke accents', description: 'Black with a gold Bhangra dancer.' },
   { id: 'tote-melbourne-skyline', category: 'tote-bags', name: 'Melbourne Skyline Tote', image: '/media/merchandise/tote-melbourne-skyline.png', width: 540, height: 732, alt: 'Natural-coloured tote bag with a black Melbourne skyline and Learn Bhangra wordmark', description: 'A Melbourne skyline in classic black and natural tones.' },
   { id: 'tote-dhol-beat', category: 'tote-bags', name: 'Dhol Beat Tote', image: '/media/merchandise/tote-dhol-beat.png', width: 540, height: 732, alt: 'Black tote bag with white Bhangra lettering, a yellow brush stroke and a dhol illustration', description: 'Black, white and yellow with a little dhol energy.' },
-]
+].map(product => ({ ...product, price: product.category === 't-shirts' ? 34.99 : 11.99 }))
 
 export const events = [
   {

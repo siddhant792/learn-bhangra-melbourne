@@ -106,6 +106,28 @@ for (const width of [1920, 1440, 1024, 390]) {
         const failures = []
         page.on('pageerror', error => failures.push(error.message))
         await ready(page, path)
+        if (path === '/merchandise') {
+          const buttons = page.getByRole('button', { name: /^Add to cart:/ })
+          await expect(buttons).toHaveCount(8)
+          await expect(page.locator('.merchandise-price').filter({ hasText: '$34.99 AUD' })).toHaveCount(4)
+          await expect(page.locator('.merchandise-price').filter({ hasText: '$11.99 AUD' })).toHaveCount(4)
+          const originalUrl = page.url()
+          const originalContent = await page.locator('main').innerHTML()
+          const requests = []
+          page.on('request', request => {
+            if (['fetch', 'xhr', 'document'].includes(request.resourceType())) requests.push(request.url())
+          })
+          for (const button of await buttons.all()) {
+            await expect(button).toBeEnabled()
+            await expect(button).toHaveCSS('cursor', 'pointer')
+            await button.click()
+          }
+          await buttons.last().press('Enter')
+          await buttons.last().press('Space')
+          expect(page.url()).toBe(originalUrl)
+          expect(await page.locator('main').innerHTML()).toBe(originalContent)
+          expect(requests).toEqual([])
+        }
         await checkLayout(page, testInfo)
         expect(failures).toEqual([])
       })

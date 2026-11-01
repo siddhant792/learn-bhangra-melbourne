@@ -87,7 +87,7 @@ All booking API responses in this suite are synthetic: no orders, payments or in
 
 ## Merchandise
 
-`/merchandise` lists four T-shirts and four tote bags in separate sections, without a cart, pricing, size selection or purchase controls. Edit the `merchandise` array in [src/content.js](src/content.js) to update the items. The supplied Gemini T-shirt images and tote screenshots were renamed descriptively, including [public/media/merchandise/tee-festival-lettering.jpeg](public/media/merchandise/tee-festival-lettering.jpeg) and [public/media/merchandise/tote-brush-lettering.png](public/media/merchandise/tote-brush-lettering.png). Their original image bytes and proportions are preserved; the assistant-generated mockups were removed. They remain labelled design previews, not confirmed manufactured products. No merchandise checkout or orders are created.
+`/merchandise` lists four T-shirts at $34.99 AUD each and four tote bags at $11.99 AUD each, with names and enabled "Add to cart" buttons that intentionally do nothing. There is no cart, size selection or checkout. Edit the `merchandise` array in [src/content.js](src/content.js) to update the items. The supplied Gemini T-shirt images and tote screenshots were renamed descriptively, including [public/media/merchandise/tee-festival-lettering.jpeg](public/media/merchandise/tee-festival-lettering.jpeg) and [public/media/merchandise/tote-brush-lettering.png](public/media/merchandise/tote-brush-lettering.png). Their original image bytes and proportions are preserved; the assistant-generated mockups were removed. They remain labelled design previews, not confirmed manufactured products. No merchandise checkout or orders are created.
 
 ## Content and media
 

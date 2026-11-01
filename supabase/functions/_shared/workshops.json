@@ -4,7 +4,7 @@
     "tickets": [
       { "id": "desi-oct29", "label": "Gujarat meets Punjab · 29 October", "startsAt": "2026-10-29T18:15:00+11:00", "amount": 2200, "capacity": null, "active": true },
       { "id": "desi-nov5", "label": "Jodi Jam · 5 November", "startsAt": "2026-11-05T18:15:00+11:00", "amount": 2200, "capacity": null, "active": true },
-      { "id": "desi-nov12", "label": "Sangeet Sweat · 12 November", "startsAt": "2026-11-12T18:15:00+11:00", "amount": 2200, "capacity": null, "active": true }
+      { "id": "desi-nov12", "label": "Sangeet · 12 November", "startsAt": "2026-11-12T18:15:00+11:00", "amount": 2200, "capacity": null, "active": true }
     ]
   },
   {

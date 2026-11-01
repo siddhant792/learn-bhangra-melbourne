@@ -42,7 +42,7 @@ export const events = [
     sessions: [
       { date: '29 October', title: 'Gujarat meets Punjab' },
       { date: '5 November', title: 'Jodi Jam' },
-      { date: '12 November', title: 'Sangeet Sweat' },
+      { date: '12 November', title: 'Sangeet' },
     ],
     details: ['All levels welcome; no dance experience needed.', 'Warm-up, full songs with short breaks, and a cool-down.', 'Wear comfortable clothes and trainers, and bring water.', 'Studio 1, Pulse Studios AU, 285 Carlisle Street, Balaclava.'],
   },
